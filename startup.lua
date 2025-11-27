@@ -235,26 +235,21 @@ print('Updating config file...')
 file_write('config', textutils.serialize(options))
 
 if options.auto_update then
-  print('Checking for updates...')
-  local current_version = file_read('startup.lua')
+  print('Downloading latest version...')
   local response = http.get(INSTALLER_URL)
   if response then
     local latest = response.readAll()
     response.close()
-    if latest ~= current_version then
-      local temp = 'temp_startup.lua'
-      file_write(temp, latest)
-      if fs.exists('startup.lua') then
-        fs.delete('startup.lua')
-      end
-      fs.move(temp, 'startup.lua')
-      print('Updated to latest version, rebooting...')
-      os.reboot()
-    else
-      print('Already up to date.')
+    local temp = 'temp_startup.lua'
+    file_write(temp, latest)
+    if fs.exists('startup.lua') then
+      fs.delete('startup.lua')
     end
+    fs.move(temp, 'startup.lua')
+    print('Updated to latest version, rebooting...')
+    os.reboot()
   else
-    print('Failed to check for updates.')
+    print('Failed to download updates.')
   end
 end
 
