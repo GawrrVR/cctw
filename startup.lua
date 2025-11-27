@@ -21,7 +21,7 @@ local options = {
 --------------------------------------------------
 
 --- This will be used as the installer source (GitHub raw URL)
-local INSTALLER_URL = ''
+local INSTALLER_URL = 'https://raw.githubusercontent.com/GawrrVR/cctw/main/startup.lua'
 
 --- Supported energy suffixes
 local energy_suffixes = { 'k', 'M', 'G', 'T', 'P' }
