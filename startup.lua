@@ -221,6 +221,8 @@ if options.auto_update then
   if response then
     local latest = response.readAll()
     response.close()
+    print('Current length: ' .. #current_version)
+    print('Latest length: ' .. #latest)
     if latest ~= current_version then
       print('Downloading latest version...')
       local temp = 'temp_startup.lua'
@@ -237,6 +239,22 @@ if options.auto_update then
   else
     print('Failed to check for updates.')
   end
+end
+
+if 'install' == args[1] then
+  print('Installing Matrix Monitor...')
+
+  local response = http.get(INSTALLER_URL)
+  if response then
+    local content = response.readAll()
+    response.close()
+    file_write('startup.lua', content)
+  else
+    error('Failed to download from GitHub')
+  end
+
+  print('Install complete! Restarting computer...')
+  os.reboot()
 end
 
 monitor = peripheral.find('monitor')
