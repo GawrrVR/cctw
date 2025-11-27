@@ -3,13 +3,14 @@ local options = {
   update_frequency = 0.1,
   text_scale = 1,
   debug = true,
+  auto_update = true,
 }
 
 --------------------------------------------------
 --- Internal variables, DO NOT CHANGE
 --------------------------------------------------
 
-local INSTALLER_URL = 'https://raw.githubusercontent.com/GawrrVR/cctw/main/startup.lua'
+local INSTALLER_URL = 'https://raw.githubusercontent.com/GawrrVR/cctw/main/main.lua'
 
 local energy_suffixes = { 'k', 'M', 'G', 'T', 'P' }
 
@@ -219,10 +220,37 @@ end
 
 args = {...}
 
+if options.auto_update then
+  print('Checking for updates...')
+  local current_version = file_read('startup.lua')
+  local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
+  if response then
+    local latest = response.readAll()
+    response.close()
+    print('Current length: ' .. #current_version)
+    print('Latest length: ' .. #latest)
+    if latest ~= current_version then
+      print('Downloading latest version...')
+      local temp = 'temp_startup.lua'
+      file_write(temp, latest)
+      if fs.exists('startup.lua') then
+        fs.delete('startup.lua')
+      end
+      fs.move(temp, 'startup.lua')
+      print('Updated to latest version, rebooting...')
+      os.reboot()
+    else
+      print('Already up to date.')
+    end
+  else
+    print('Failed to check for updates.')
+  end
+end
+
 if 'install' == args[1] then
   print('Installing Matrix Monitor...')
 
-  local response = http.get(INSTALLER_URL)
+  local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
   if response then
     local content = response.readAll()
     response.close()
