@@ -221,19 +221,6 @@ end
 
 args = {...}
 
-if fs.exists('config') then
-  debug('Loading settings from "config" file...')
-
-  local custom_options = textutils.unserialize(file_read('config'))
-
-  for k, v in pairs(custom_options) do
-    options[k] = v
-  end
-end
-
-print('Updating config file...')
-file_write('config', textutils.serialize(options))
-
 if options.auto_update then
   print('Downloading latest version...')
   local response = http.get(INSTALLER_URL)
