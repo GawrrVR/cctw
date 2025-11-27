@@ -26,6 +26,10 @@ local induction_matrix = nil
 
 local monitor = nil
 
+local width = 0
+
+local start_row = 1
+
 --------------------------------------------------
 --- Helper functions
 --------------------------------------------------
@@ -67,7 +71,7 @@ function print_flush ()
   if monitor then
     term.redirect(monitor)
     term.clear()
-    term.setCursorPos(1, 1)
+    term.setCursorPos(1, start_row)
     for _, item in ipairs(print_buffer) do
       if item[2] then
         term.setTextColor(item[2])
@@ -153,7 +157,6 @@ local function center_text(text, w)
 end
 
 function print_matrix_info (matrix_info)
-  local width = monitor.getSize()
 
   print_r(center_text("Matrix Induction", width), colors.yellow)
   print_r("", colors.white)
@@ -268,6 +271,8 @@ monitor = peripheral.find('monitor')
 if monitor then
   debug('Monitor detected, enabling output!')
   monitor.setTextScale(options.text_scale)
+  width, height = monitor.getSize()
+  start_row = math.max(1, math.floor((height - 26) / 2) + 1)
 else
   error('No monitor detected!')
 end
