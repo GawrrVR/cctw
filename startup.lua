@@ -162,7 +162,7 @@ function print_matrix_info (matrix_info)
 
   local bar_length = 25
   local filled = math.floor(matrix_info.energy_percentage * bar_length)
-  local bar = "█" .. string.rep("█", filled) .. string.rep("░", bar_length - filled) .. "░"
+  local bar = "[" .. string.rep("#", filled) .. string.rep("-", bar_length - filled) .. "]"
   print_r(center_text(energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), width), colors.green)
   print_r(center_text(round_percentage(matrix_info.energy_percentage), width), colors.green)
   print_r(center_text(bar, width), colors.yellow)
