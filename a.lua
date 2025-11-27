@@ -163,7 +163,13 @@ function print_matrix_info (matrix_info)
     table.insert(local_buffer, {text, color})
   end
 
-  print_r_local(center_text("Matrix Induction", width), colors.yellow)
+  local title = "Matrix Induction"
+  local box_width = #title + 4
+  local top_bottom = "+" .. string.rep("-", box_width - 2) .. "+"
+  local middle = "| " .. title .. " |"
+  print_r_local(center_text(top_bottom, width), colors.yellow)
+  print_r_local(center_text(middle, width), colors.yellow)
+  print_r_local(center_text(top_bottom, width), colors.yellow)
   print_r_local("", colors.white)
   print_r_local(center_text("*** ENERGIE ***", width), colors.cyan)
   print_r_local("", colors.white)
