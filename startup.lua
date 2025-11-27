@@ -205,6 +205,11 @@ function print_matrix_info (matrix_info)
     status_color = colors.gray
   end
   print_r(center_text(status_text, width), status_color)
+
+  print_r(center_text("*** INFO DU JOUR ***", width), colors.orange)
+  print_r("", colors.white)
+  print_r("Macron Demission !", colors.white)
+  print_r("Bernard President !", colors.white)
 end
 
 --------------------------------------------------
