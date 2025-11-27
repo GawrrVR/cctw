@@ -136,9 +136,9 @@ function eta_string (seconds)
   end
 
   if time.weeks > 0 then
-    return ('%dwk %dd %dh'):format(time.weeks, time.days, time.hours)
+    return ('%ds %dj %dh'):format(time.weeks, time.days, time.hours)
   elseif time.days >= 3 then
-    return ('%dd %dh'):format(time.days, time.hours)
+    return ('%dj %dh'):format(time.days, time.hours)
   end
 
   return ('%d:%02d:%02d'):format(time.hours, time.minutes, time.seconds)
@@ -163,7 +163,7 @@ function print_matrix_info (matrix_info)
   print_r(bordered_line("Moniteur de Matrice - Gawrr", colors.yellow))
   print_r(border, colors.white)
   print_r(bordered_line("", colors.white))
-  print_r(bordered_line("=== ÉNERGIE ===", colors.cyan))
+  print_r(bordered_line("=== ENERGIE ===", colors.cyan))
   print_r(bordered_line("", colors.white))
 
   local bar_length = 20
@@ -175,11 +175,11 @@ function print_matrix_info (matrix_info)
   print_r(bordered_line("", colors.white))
   print_r(bordered_line("--- TRANSFERTS I/O ---", colors.magenta))
   print_r(bordered_line("", colors.white))
-  print_r(bordered_line("Entrée: " .. energy_string(matrix_info.io_input) .. "/t", colors.blue))
+  print_r(bordered_line("Entree: " .. energy_string(matrix_info.io_input) .. "/t", colors.blue))
   print_r(bordered_line("Sortie: " .. energy_string(matrix_info.io_output) .. "/t", colors.blue))
   print_r(bordered_line("I/O Max: " .. energy_string(matrix_info.io_capacity) .. "/t", colors.blue))
   print_r(bordered_line("", colors.white))
-  print_r(bordered_line("*** FLUX ÉNERGIQUE ***", colors.purple))
+  print_r(bordered_line("*** FLUX ***", colors.purple))
   print_r(bordered_line("", colors.white))
 
   local change_text = ""
