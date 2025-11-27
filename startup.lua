@@ -224,6 +224,7 @@ if options.auto_update then
     response.close()
     if latest ~= current_version then
       file_write('startup_new.lua', latest)
+      fs.delete('startup.lua')
       fs.move('startup_new.lua', 'startup.lua')
       print('Updated to latest version, rebooting...')
       os.reboot()
