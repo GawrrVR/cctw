@@ -36,6 +36,7 @@ local start_row = 1
 
 function file_read (file)
   local handle = fs.open(file, 'r')
+  if not handle then return nil end
   local data = handle.readAll()
   handle.close()
   return data
@@ -226,27 +227,31 @@ args = {...}
 if options.auto_update then
   print('Checking for updates...')
   local current_version = file_read('startup.lua')
-  local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
-  if response then
-    local latest = response.readAll()
-    response.close()
-    print('Current length: ' .. #current_version)
-    print('Latest length: ' .. #latest)
-    if latest ~= current_version then
-      print('Downloading latest version...')
-      local temp = 'temp_startup.lua'
-      file_write(temp, latest)
-      if fs.exists('startup.lua') then
-        fs.delete('startup.lua')
-      end
-      fs.move(temp, 'startup.lua')
-      print('Updated to latest version, rebooting...')
-      os.reboot()
-    else
-      print('Already up to date.')
-    end
+  if not current_version then
+    print('Failed to read current version.')
   else
-    print('Failed to check for updates.')
+    local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
+    if response then
+      local latest = response.readAll()
+      response.close()
+      print('Current length: ' .. #current_version)
+      print('Latest length: ' .. #latest)
+      if latest ~= current_version then
+        print('Downloading latest version...')
+        local temp = 'temp_startup.lua'
+        file_write(temp, latest)
+        if fs.exists('startup.lua') then
+          fs.delete('startup.lua')
+        end
+        fs.move(temp, 'startup.lua')
+        print('Updated to latest version, rebooting...')
+        os.reboot()
+      else
+        print('Already up to date.')
+      end
+    else
+      print('Failed to check for updates.')
+    end
   end
 end
 
