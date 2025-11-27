@@ -213,8 +213,6 @@ function print_matrix_info (matrix_info)
   end
   print_r(bordered_line(status_text, status_color))
   print_r(border, colors.white)
-  print_r(bordered_line("Powered by ComputerCraft & Mekanism", colors.lightGray))
-  print_r(border, colors.white)
 end
 
 --------------------------------------------------
