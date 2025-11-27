@@ -177,8 +177,19 @@ function print_matrix_info (matrix_info)
   print_r(bordered_line("Max IO: " .. energy_string(matrix_info.io_capacity) .. "/t", colors.blue))
   print_r(bordered_line("", colors.white))
 
-  local change_text = "Change: " .. energy_string(matrix_info.change_amount_per_second) .. "/s"
-  print_r(bordered_line(change_text, colors.purple))
+  local change_text = ""
+  local change_color = colors.gray
+  if matrix_info.change_amount_per_second > 0 then
+    change_text = "+" .. energy_string(matrix_info.change_amount_per_second) .. "/s"
+    change_color = colors.green
+  elseif matrix_info.change_amount_per_second < 0 then
+    change_text = "-" .. energy_string(math.abs(matrix_info.change_amount_per_second)) .. "/s"
+    change_color = colors.red
+  else
+    change_text = "~"
+    change_color = colors.gray
+  end
+  print_r(bordered_line(change_text, change_color))
   print_r(bordered_line("", colors.white))
 
   local status_text = "Status: "
