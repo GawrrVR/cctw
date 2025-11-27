@@ -154,33 +154,27 @@ end
 
 function print_matrix_info (matrix_info)
   local width = monitor.getSize()
-  local border = "+" .. string.rep("-", width - 2) .. "+"
-  local function bordered_line(text, color)
-    return "| " .. center_text(text, width - 4) .. " |", color
-  end
 
-  print_r(border, colors.white)
-  print_r(bordered_line("Matrix Induction", colors.yellow))
-  print_r(border, colors.white)
-  print_r(bordered_line("", colors.white))
-  print_r(bordered_line("=== ENERGIE ===", colors.cyan))
-  print_r(bordered_line("", colors.white))
+  print_r(center_text("Matrix Induction", width), colors.yellow)
+  print_r("", colors.white)
+  print_r(center_text("=== ENERGIE ===", width), colors.cyan)
+  print_r("", colors.white)
 
   local bar_length = 20
   local filled = math.floor(matrix_info.energy_percentage * bar_length)
   local bar = "[" .. string.rep("#", filled) .. string.rep("-", bar_length - filled) .. "]"
-  print_r(bordered_line(energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), colors.green))
-  print_r(bordered_line(round_percentage(matrix_info.energy_percentage), colors.green))
-  print_r(bordered_line(bar, colors.yellow))
-  print_r(bordered_line("", colors.white))
-  print_r(bordered_line("--- TRANSFERTS I/O ---", colors.magenta))
-  print_r(bordered_line("", colors.white))
-  print_r(bordered_line("Entree: " .. energy_string(matrix_info.io_input) .. "/t", colors.blue))
-  print_r(bordered_line("Sortie: " .. energy_string(matrix_info.io_output) .. "/t", colors.blue))
-  print_r(bordered_line("I/O Max: " .. energy_string(matrix_info.io_capacity) .. "/t", colors.blue))
-  print_r(bordered_line("", colors.white))
-  print_r(bordered_line("*** FLUX ***", colors.purple))
-  print_r(bordered_line("", colors.white))
+  print_r(center_text(energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), width), colors.green)
+  print_r(center_text(round_percentage(matrix_info.energy_percentage), width), colors.green)
+  print_r(center_text(bar, width), colors.yellow)
+  print_r("", colors.white)
+  print_r(center_text("--- TRANSFERTS I/O ---", width), colors.magenta)
+  print_r("", colors.white)
+  print_r(center_text("Entree: " .. energy_string(matrix_info.io_input) .. "/t", width), colors.blue)
+  print_r(center_text("Sortie: " .. energy_string(matrix_info.io_output) .. "/t", width), colors.blue)
+  print_r(center_text("I/O Max: " .. energy_string(matrix_info.io_capacity) .. "/t", width), colors.blue)
+  print_r("", colors.white)
+  print_r(center_text("*** FLUX ***", width), colors.purple)
+  print_r("", colors.white)
 
   local change_text = ""
   local change_color = colors.gray
@@ -194,10 +188,10 @@ function print_matrix_info (matrix_info)
     change_text = "~"
     change_color = colors.gray
   end
-  print_r(bordered_line(change_text, change_color))
-  print_r(bordered_line("", colors.white))
-  print_r(bordered_line("~~~ STATUT ~~~", colors.orange))
-  print_r(bordered_line("", colors.white))
+  print_r(center_text(change_text, width), change_color)
+  print_r("", colors.white)
+  print_r(center_text("~~~ STATUT ~~~", width), colors.orange)
+  print_r("", colors.white)
 
   local status_text = ""
   local status_color = colors.white
@@ -211,8 +205,7 @@ function print_matrix_info (matrix_info)
     status_text = "~"
     status_color = colors.gray
   end
-  print_r(bordered_line(status_text, status_color))
-  print_r(border, colors.white)
+  print_r(center_text(status_text, width), status_color)
 end
 
 --------------------------------------------------
