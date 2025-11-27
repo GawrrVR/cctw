@@ -1,6 +1,6 @@
 local options = {
   energy_type = 'FE',
-  update_frequency = 0.25,
+  update_frequency = 0.1,
   text_scale = 1,
   debug = true,
   auto_update = true,
