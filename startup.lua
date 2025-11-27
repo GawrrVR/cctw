@@ -222,21 +222,27 @@ end
 args = {...}
 
 if options.auto_update then
-  print('Downloading latest version...')
+  print('Checking for updates...')
+  local current_version = file_read('startup.lua')
   local response = http.get(INSTALLER_URL)
   if response then
     local latest = response.readAll()
     response.close()
-    local temp = 'temp_startup.lua'
-    file_write(temp, latest)
-    if fs.exists('startup.lua') then
-      fs.delete('startup.lua')
+    if latest ~= current_version then
+      print('Downloading latest version...')
+      local temp = 'temp_startup.lua'
+      file_write(temp, latest)
+      if fs.exists('startup.lua') then
+        fs.delete('startup.lua')
+      end
+      fs.move(temp, 'startup.lua')
+      print('Updated to latest version, rebooting...')
+      os.reboot()
+    else
+      print('Already up to date.')
     end
-    fs.move(temp, 'startup.lua')
-    print('Updated to latest version, rebooting...')
-    os.reboot()
   else
-    print('Failed to download updates.')
+    print('Failed to check for updates.')
   end
 end
 
