@@ -160,7 +160,7 @@ function print_matrix_info (matrix_info)
   end
 
   print_r(border, colors.white)
-  print_r(bordered_line("Matrix Monitor", colors.yellow))
+  print_r(bordered_line("Matrix Monitor - Gawrr", colors.yellow))
   print_r(border, colors.white)
   print_r(bordered_line("", colors.white))
 
