@@ -156,28 +156,33 @@ local function center_text(text, w)
 end
 
 function print_matrix_info (matrix_info)
-  local width = monitor.getSize()
+  local width, height = monitor.getSize()
 
-  print_r(center_text("Matrix Induction", width), colors.yellow)
-  print_r("", colors.white)
-  print_r(center_text("*** ENERGIE ***", width), colors.cyan)
-  print_r("", colors.white)
+  local local_buffer = {}
+  local function print_r_local(text, color)
+    table.insert(local_buffer, {text, color})
+  end
+
+  print_r_local(center_text("Matrix Induction", width), colors.yellow)
+  print_r_local("", colors.white)
+  print_r_local(center_text("*** ENERGIE ***", width), colors.cyan)
+  print_r_local("", colors.white)
 
   local bar_length = 25
   local filled = math.floor(matrix_info.energy_percentage * bar_length)
   local bar = "[" .. string.rep("#", filled) .. string.rep("-", bar_length - filled) .. "]"
-  print_r(center_text(energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), width), colors.green)
-  print_r(center_text(round_percentage(matrix_info.energy_percentage), width), colors.green)
-  print_r(center_text(bar, width), colors.yellow)
-  print_r("", colors.white)
-  print_r(center_text("*** TRANSFERTS I/O ***", width), colors.magenta)
-  print_r("", colors.white)
-  print_r(center_text("Entree: " .. energy_string(matrix_info.io_input) .. "/s", width), colors.blue)
-  print_r(center_text("Sortie: " .. energy_string(matrix_info.io_output) .. "/s", width), colors.blue)
-  print_r(center_text("I/O Max: " .. energy_string(matrix_info.io_capacity) .. "/s", width), colors.blue)
-  print_r("", colors.white)
-  print_r(center_text("*** FLUX ***", width), colors.purple)
-  print_r("", colors.white)
+  print_r_local(center_text(energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), width), colors.green)
+  print_r_local(center_text(round_percentage(matrix_info.energy_percentage), width), colors.green)
+  print_r_local(center_text(bar, width), colors.yellow)
+  print_r_local("", colors.white)
+  print_r_local(center_text("*** TRANSFERTS I/O ***", width), colors.magenta)
+  print_r_local("", colors.white)
+  print_r_local(center_text("Entree: " .. energy_string(matrix_info.io_input) .. "/s", width), colors.blue)
+  print_r_local(center_text("Sortie: " .. energy_string(matrix_info.io_output) .. "/s", width), colors.blue)
+  print_r_local(center_text("I/O Max: " .. energy_string(matrix_info.io_capacity) .. "/s", width), colors.blue)
+  print_r_local("", colors.white)
+  print_r_local(center_text("*** FLUX ***", width), colors.purple)
+  print_r_local("", colors.white)
 
   local change_text = ""
   local change_color = colors.gray
@@ -191,10 +196,10 @@ function print_matrix_info (matrix_info)
     change_text = "~"
     change_color = colors.gray
   end
-  print_r(center_text(change_text, width), change_color)
-  print_r("", colors.white)
-  print_r(center_text("*** STATUT ***", width), colors.orange)
-  print_r("", colors.white)
+  print_r_local(center_text(change_text, width), change_color)
+  print_r_local("", colors.white)
+  print_r_local(center_text("*** STATUT ***", width), colors.orange)
+  print_r_local("", colors.white)
 
   local status_text = ""
   local status_color = colors.white
@@ -208,13 +213,24 @@ function print_matrix_info (matrix_info)
     status_text = "~"
     status_color = colors.gray
   end
-  print_r(center_text(status_text, width), status_color)
-  print_r("", colors.white)
+  print_r_local(center_text(status_text, width), status_color)
+  print_r_local("", colors.white)
 
-  print_r(center_text("*** INFO DU JOUR ***", width), colors.orange)
-  print_r("", colors.white)
-  print_r(center_text("Macron Demission !", width), colors.white)
-  print_r(center_text("Bernard President !", width), colors.white)
+  print_r_local(center_text("*** INFO DU JOUR ***", width), colors.orange)
+  print_r_local("", colors.white)
+  print_r_local(center_text("Macron Demission !", width), colors.white)
+  print_r_local(center_text("Bernard President !", width), colors.white)
+
+  local total_lines = #local_buffer
+  local top_padding = math.max(0, math.floor((height - total_lines) / 2))
+  local new_buffer = {}
+  for i = 1, top_padding do
+    table.insert(new_buffer, {"", colors.white})
+  end
+  for _, item in ipairs(local_buffer) do
+    table.insert(new_buffer, item)
+  end
+  print_buffer = new_buffer
 end
 
 --------------------------------------------------
