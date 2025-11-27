@@ -26,17 +26,12 @@ local induction_matrix = nil
 
 local monitor = nil
 
-local width = 0
-
-local start_row = 1
-
 --------------------------------------------------
 --- Helper functions
 --------------------------------------------------
 
 function file_read (file)
   local handle = fs.open(file, 'r')
-  if not handle then return nil end
   local data = handle.readAll()
   handle.close()
   return data
@@ -72,7 +67,7 @@ function print_flush ()
   if monitor then
     term.redirect(monitor)
     term.clear()
-    term.setCursorPos(1, start_row)
+    term.setCursorPos(1, 1)
     for _, item in ipairs(print_buffer) do
       if item[2] then
         term.setTextColor(item[2])
@@ -158,6 +153,7 @@ local function center_text(text, w)
 end
 
 function print_matrix_info (matrix_info)
+  local width = monitor.getSize()
 
   print_r(center_text("Matrix Induction", width), colors.yellow)
   print_r("", colors.white)
@@ -227,31 +223,27 @@ args = {...}
 if options.auto_update then
   print('Checking for updates...')
   local current_version = file_read('startup.lua')
-  if not current_version then
-    print('Failed to read current version.')
-  else
-    local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
-    if response then
-      local latest = response.readAll()
-      response.close()
-      print('Current length: ' .. #current_version)
-      print('Latest length: ' .. #latest)
-      if latest ~= current_version then
-        print('Downloading latest version...')
-        local temp = 'temp_startup.lua'
-        file_write(temp, latest)
-        if fs.exists('startup.lua') then
-          fs.delete('startup.lua')
-        end
-        fs.move(temp, 'startup.lua')
-        print('Updated to latest version, rebooting...')
-        os.reboot()
-      else
-        print('Already up to date.')
+  local response = http.get(INSTALLER_URL .. '?t=' .. os.time())
+  if response then
+    local latest = response.readAll()
+    response.close()
+    print('Current length: ' .. #current_version)
+    print('Latest length: ' .. #latest)
+    if latest ~= current_version then
+      print('Downloading latest version...')
+      local temp = 'temp_startup.lua'
+      file_write(temp, latest)
+      if fs.exists('startup.lua') then
+        fs.delete('startup.lua')
       end
+      fs.move(temp, 'startup.lua')
+      print('Updated to latest version, rebooting...')
+      os.reboot()
     else
-      print('Failed to check for updates.')
+      print('Already up to date.')
     end
+  else
+    print('Failed to check for updates.')
   end
 end
 
@@ -276,8 +268,6 @@ monitor = peripheral.find('monitor')
 if monitor then
   debug('Monitor detected, enabling output!')
   monitor.setTextScale(options.text_scale)
-  width, height = monitor.getSize()
-  start_row = math.max(1, math.floor((height - 26) / 2) + 1)
 else
   error('No monitor detected!')
 end
