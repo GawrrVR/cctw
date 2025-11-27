@@ -253,35 +253,6 @@ if options.auto_update then
   end
 end
 
-if 'install' == args[1] then
-  print('Installing Matrix Monitor...')
-
-  local has_existing_install = fs.exists('startup.lua')
-
-  if fs.exists('startup.lua') then
-    fs.delete('startup.lua')
-  end
-
-  local response = http.get(INSTALLER_URL)
-  if response then
-    local content = response.readAll()
-    response.close()
-    file_write('startup.lua', content)
-  else
-    error('Failed to download from GitHub')
-  end
-
-  if not has_existing_install then
-    print('Opening config file for editing...')
-    sleep(2.5)
-    shell.run('edit', 'config')
-  end
-
-  print('Install complete! Restarting computer...')
-  sleep(2.5)
-  os.reboot()
-end
-
 monitor = peripheral.find('monitor')
 
 if monitor then
