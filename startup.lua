@@ -163,18 +163,23 @@ function print_matrix_info (matrix_info)
   print_r(bordered_line("Matrix Monitor - Gawrr", colors.yellow))
   print_r(border, colors.white)
   print_r(bordered_line("", colors.white))
+  print_r(bordered_line("=== ENERGY STATUS ===", colors.cyan))
+  print_r(bordered_line("", colors.white))
 
-  local bar_length = 15
+  local bar_length = 20
   local filled = math.floor(matrix_info.energy_percentage * bar_length)
-  local bar = "[" .. string.rep("=", filled) .. string.rep(" ", bar_length - filled) .. "]"
-  print_r(bordered_line("Puissance: " .. energy_string(matrix_info.energy_stored), colors.green))
-  print_r(bordered_line("Limite: " .. energy_string(matrix_info.energy_capacity), colors.green))
+  local bar = "[" .. string.rep("#", filled) .. string.rep("-", bar_length - filled) .. "]"
+  print_r(bordered_line("Puissance: " .. energy_string(matrix_info.energy_stored) .. " / " .. energy_string(matrix_info.energy_capacity), colors.green))
   print_r(bordered_line("Charge: " .. round_percentage(matrix_info.energy_percentage), colors.green))
   print_r(bordered_line(bar, colors.yellow))
+  print_r(bordered_line("", colors.white))
+  print_r(bordered_line("--- I/O TRANSFERS ---", colors.magenta))
   print_r(bordered_line("", colors.white))
   print_r(bordered_line("Input: " .. energy_string(matrix_info.io_input) .. "/t", colors.blue))
   print_r(bordered_line("Output: " .. energy_string(matrix_info.io_output) .. "/t", colors.blue))
   print_r(bordered_line("Max IO: " .. energy_string(matrix_info.io_capacity) .. "/t", colors.blue))
+  print_r(bordered_line("", colors.white))
+  print_r(bordered_line("*** ENERGY FLOW ***", colors.purple))
   print_r(bordered_line("", colors.white))
 
   local change_text = ""
@@ -191,6 +196,8 @@ function print_matrix_info (matrix_info)
   end
   print_r(bordered_line(change_text, change_color))
   print_r(bordered_line("", colors.white))
+  print_r(bordered_line("~~~ SYSTEM STATUS ~~~", colors.orange))
+  print_r(bordered_line("", colors.white))
 
   local status_text = "Status: "
   local status_color = colors.white
@@ -205,6 +212,8 @@ function print_matrix_info (matrix_info)
     status_color = colors.gray
   end
   print_r(bordered_line(status_text, status_color))
+  print_r(border, colors.white)
+  print_r(bordered_line("Powered by ComputerCraft & Mekanism", colors.lightGray))
   print_r(border, colors.white)
 end
 
