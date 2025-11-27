@@ -1,8 +1,5 @@
 -- Default settings, do not change
 local options = {
-  -- Unique identifier for this matrix on rednet, required for rednet functionality
-  rednet_identifier = '',
-
   -- Energy type being displayed (J, FE)
   energy_type = 'FE',
 
@@ -14,6 +11,9 @@ local options = {
 
   -- Output debug data to the computer's internal display
   debug = true,
+
+  -- Auto-update from GitHub on startup
+  auto_update = true,
 }
 
 --------------------------------------------------
@@ -40,12 +40,6 @@ local induction_matrix = nil
 
 --- This is our Monitor, we'll auto-detect it later
 local monitor = nil
-
---- This is our Modem, we'll auto-detect it later
-local modem = nil
-
---- Prefix used for rednet channels
-local rednet_prefix = 'WL_Mek_Matrix'
 
 --------------------------------------------------
 --- Helper functions
@@ -264,6 +258,27 @@ end
 print('Updating config file...')
 file_write('config', textutils.serialize(options))
 
+-- Auto-update check
+if options.auto_update then
+  print('Checking for updates...')
+  local current_version = file_read('startup.lua')
+  local response = http.get(INSTALLER_URL)
+  if response then
+    local latest = response.readAll()
+    response.close()
+    if latest ~= current_version then
+      file_write('startup_new.lua', latest)
+      fs.move('startup_new.lua', 'startup.lua')
+      print('Updated to latest version, rebooting...')
+      os.reboot()
+    else
+      print('Already up to date.')
+    end
+  else
+    print('Failed to check for updates.')
+  end
+end
+
 -- Handles special case when "install" is executed from the pastebin
 if 'install' == args[1] then
   print('Installing Matrix Monitor...')
@@ -301,33 +316,13 @@ end
 
 -- Detects peripherals
 monitor = peripheral.find('monitor')
-modem = peripheral.find('modem')
-
---- The rednet channel/protocol we'll be using
-local rednet_channel = nil
 
 -- Checks for an existing monitor
 if monitor then
   debug('Monitor detected, enabling output!')
   monitor.setTextScale(options.text_scale)
 else
-  debug('No monitor detected, entering headless mode!')
-
-  -- Makes sure we have a connected modem
-  if not modem then
-    error('No monitor or modem detected, cannot enter headless mode!')
-  end
-end
-
--- Conencts to rednet if modem available
-if peripheral.find('modem') then
-  if not options.rednet_identifier or options.rednet_identifier == '' then
-    debug('Modem has been found, but no wireless identifier found on configs, will not connect!')
-  else
-    peripheral.find('modem', rednet.open)
-    debug('Connected to rednet!')
-    rednet_channel = ('%s#%s'):format(rednet_prefix, options.rednet_identifier)
-  end
+  error('No monitor detected!')
 end
 
 --------------------------------------------------
@@ -377,11 +372,6 @@ while true do
 
     -- Sets the new "previous" value
     energy_stored_previous = matrix_info.energy_stored
-
-    -- Broadcasts our matrix info if we have a modem
-    if rednet.isOpen() and rednet_channel then
-      rednet.broadcast(textutils.serialize(matrix_info), rednet_channel)
-    end
 
     -- Prints the matrix information
     print_matrix_info(matrix_info)
