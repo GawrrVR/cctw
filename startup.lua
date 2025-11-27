@@ -157,7 +157,7 @@ function print_matrix_info (matrix_info)
 
   print_r(center_text("Matrix Induction", width), colors.yellow)
   print_r("", colors.white)
-  print_r(center_text("=== ENERGIE ===", width), colors.cyan)
+  print_r(center_text("*** ENERGIE ***", width), colors.cyan)
   print_r("", colors.white)
 
   local bar_length = 20
@@ -167,7 +167,7 @@ function print_matrix_info (matrix_info)
   print_r(center_text(round_percentage(matrix_info.energy_percentage), width), colors.green)
   print_r(center_text(bar, width), colors.yellow)
   print_r("", colors.white)
-  print_r(center_text("--- TRANSFERTS I/O ---", width), colors.magenta)
+  print_r(center_text("*** TRANSFERTS I/O ***", width), colors.magenta)
   print_r("", colors.white)
   print_r(center_text("Entree: " .. energy_string(matrix_info.io_input) .. "/t", width), colors.blue)
   print_r(center_text("Sortie: " .. energy_string(matrix_info.io_output) .. "/t", width), colors.blue)
@@ -190,7 +190,7 @@ function print_matrix_info (matrix_info)
   end
   print_r(center_text(change_text, width), change_color)
   print_r("", colors.white)
-  print_r(center_text("~~~ STATUT ~~~", width), colors.orange)
+  print_r(center_text("*** STATUT ***", width), colors.orange)
   print_r("", colors.white)
 
   local status_text = ""
