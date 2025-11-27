@@ -293,18 +293,10 @@ while true do
       io_capacity = induction_matrix.getTransferCap(),
     }
 
-    if not energy_stored_previous then
-      energy_stored_previous = matrix_info.energy_stored
-    end
+    matrix_info.change_amount_per_second = matrix_info.io_input - matrix_info.io_output
 
-    matrix_info.change_interval = options.update_frequency
-    matrix_info.change_amount = matrix_info.energy_stored - energy_stored_previous
-    matrix_info.change_amount_per_second = matrix_info.change_amount / options.update_frequency
-
-    matrix_info.is_charging = matrix_info.change_amount > 0
-    matrix_info.is_discharging = matrix_info.change_amount < 0
-
-    energy_stored_previous = matrix_info.energy_stored
+    matrix_info.is_charging = matrix_info.change_amount_per_second > 0
+    matrix_info.is_discharging = matrix_info.change_amount_per_second < 0
 
     print_matrix_info(matrix_info)
   end)
